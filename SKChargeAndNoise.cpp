@@ -37,9 +37,8 @@ int main (int argc, char** argv) {
     }
 
     std::string OutFileName = OutputPrefixName+"_"+std::to_string(StartFrame)+"_to_"+std::to_string(EndFrame)+".fits";
-
-    std::string MeanOutFileName = "Avg_"+OutputPrefixName;
-    std::string StdevOutFileName = "Stdev_"+OutputPrefixName;
+    std::string MeanOutFileName = "Avg_"+OutFileName;
+    std::string StdevOutFileName = "Stdev_"+OutFileName;
 
     ThisCCDImage.SaveFitsSK(MeanStdImage[0],MeanOutFileName);
     ThisCCDImage.SaveFitsSK(MeanStdImage[1],StdevOutFileName);
