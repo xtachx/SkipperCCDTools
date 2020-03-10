@@ -49,11 +49,6 @@ void SKCCDImage::LoadFits(void ) {
     this->ImageYMax = yaxismax;
     this->ImageXMax = (xaxismax-2)/this->nChargeMeasurements;
 
-    /*Get Integration times*/
-    fits_read_key(fptr, TDOUBLE, "ITGTIME", &this->IntegralTime, NULL, &status);
-    fits_read_key(fptr, TDOUBLE, "PRETIME", &this->PreTime, NULL, &status);
-    fits_read_key(fptr, TDOUBLE, "POSTIME", &this->PostTime, NULL, &status);
-
 
     /*Get the Amplifier direction*/
     char Ampl[15];

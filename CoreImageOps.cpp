@@ -4,7 +4,6 @@
 
 
 #include "opencv2/opencv.hpp"
-#include "UtilityFunctions.hpp"
 #include <string>
 #include <algorithm>
 #include "CoreImageOps.hpp"
@@ -15,7 +14,13 @@ SKCCDImage::SKCCDImage(std::string inFile) {
 
     /*Assignments*/
     this->inFitsFileName = inFile;
-    this->xAxisOffset = 2;
+
+    /*This is the number of reads to ignore in the begining of each row. 
+     *The first 2 pixels are always ignored because they dont represent 
+     *anything coming out of the CCD. 
+     */
+
+    this->xAxisOffset = 2;          
 
     this->ImageFileStem = std::experimental::filesystem::path(inFile).stem();
 
@@ -26,6 +31,7 @@ SKCCDImage::~SKCCDImage() {
 
 
 }
+
 
 /*Skipper image's indexing */
 int SKCCDImage::skImgX(int frame, int X) {
@@ -48,8 +54,6 @@ int SKCCDImage::skImgX(int frame, int X) {
 int SKCCDImage::skImgY(int frame, int Y) {
     return Y;
 }
-
-
 
 
 

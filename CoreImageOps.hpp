@@ -10,6 +10,9 @@
 #include <string>
 
 
+double fMedianPitam(cv::Mat SingleSkipROI);
+
+
 class SKCCDImage {
 
 private:
@@ -37,18 +40,9 @@ public:
 
 
 
-
-    //void SkPixelMerge(int, cv::Mat,
-    //                  double (*)(cv::Mat, int) , int);
-
     /*CCD Image offsets*/
     int CCDImageOffset;
     int nIgnoreFirstNDCMs;
-
-    /*Integration times*/
-    double IntegralTime;
-    double PreTime;
-    double PostTime;
 
     /*NDCMs*/
     short nChargeMeasurements;
@@ -68,15 +62,12 @@ public:
     //cv::Mat _cvSkMergedImage;
     double *_cvSkImageData;
 
-    /*Basic Analysis - Frame viewer*/
-    //int skImgX(int, int);
-    //int skImgY(int, int);
-
+    /*Image Ops routines*/
+    std::vector<cv::Mat> MakeMeanImgOfFrames(cv::Mat &skImage, int StartFrame, int EndFrame);
+    cv::Mat YBaselineCorrect(cv::Mat &inImage);
 
 
 };
 
-double fMedianPitam(cv::Mat );
-//double selectSingleNDCM(cv::Mat, int );
 
 #endif //CCDDRONE_FITSOCV_HPP
