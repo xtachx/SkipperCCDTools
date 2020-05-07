@@ -72,7 +72,7 @@ void SKCCDImage::LoadFits(void ) {
 
 
 /*Function to write an SK Merged image as a FITS file.*/
-void SKCCDImage::SaveFitsSK(cv::Mat ImageToSave, std::string outFileName){
+void SKCCDImage::SaveFitsSK(cv::Mat ImageToSave, std::string outFileName, int outputPixelResolution){
 
     /*These are the temporary FITS variables we need to open the file
      * fptr -> fits file pointer
@@ -88,17 +88,12 @@ void SKCCDImage::SaveFitsSK(cv::Mat ImageToSave, std::string outFileName){
     long imageSizeXY_Out[2] = { this->ImageXMax, this->ImageYMax };
     nPixelsToWrite = imageSizeXY_Out[0] * imageSizeXY_Out[1];
 
+
     status = 0;         /* initialize status before calling fitsio routines */
     fits_create_file(&fptr, outFileName.c_str(), &status);
 
-    /*This section copies the header from the original file to the new one*/
-    fitsfile *fptr_infile;
-    fits_open_file(&fptr_infile,this->inFitsFileName.c_str(),READONLY,&status);
-    fits_copy_header(fptr_infile, fptr,  &status);
-    fits_close_file(fptr_infile, &status);
-    /* ------------- */
-
-    fits_create_img(fptr, LONG_IMG, nAxis, imageSizeXY_Out, &status);
+  
+    fits_create_img(fptr, outputPixelResolution, nAxis, imageSizeXY_Out, &status);
     int nullValue=0;
 
     /*Write processed comment*/
@@ -111,14 +106,32 @@ void SKCCDImage::SaveFitsSK(cv::Mat ImageToSave, std::string outFileName){
 
     /* Write the recon related keywords*/
     std::chrono::system_clock::time_point _processTime = std::chrono::system_clock::now();
-    //fits_write_key(fptr, TSTRING, "RTime", (char*) _processTime.c_str(), "Time of recon processing", &status);
+    // fits_write_key(fptr, TSTRING, "RTime", (char*) _processTime.c_str(), "Time of recon processing", &status);
     fits_write_key(fptr, TINT, "RIMGOFST", &this->CCDImageOffset, "Image offset (usually 2 cols at the beginning of the file).", &status);
     fits_write_key(fptr, TINT, "RIGNDCMS", &this->nIgnoreFirstNDCMs, "How many NDCMs to ignore in each pixel for recon.", &status);
+
 
 
     /*Write image*/
     double *_cvMergedImageData = (double*) ImageToSave.data;
     fits_write_pix(fptr, TDOUBLE, fpixel, nPixelsToWrite, _cvMergedImageData, &status);
+
+
+    /* Header Updates -- this must happen after the image is written */
+
+    /*This section copies the header from the original file to the new one*/
+    fitsfile *fptr_infile;
+    fits_open_file(&fptr_infile,this->inFitsFileName.c_str(),READONLY,&status);
+    fits_copy_header(fptr_infile, fptr,  &status);
+    fits_close_file(fptr_infile, &status);
+    /* ------------- */
+
+    // Update existing header
+    int bzero = 0;
+    fits_update_key(fptr, TINT, "BITPIX", &outputPixelResolution, "number of bits per data pixel", &status);
+    fits_update_key(fptr, TINT, "NAXIS1", &this->ImageXMax, "length of data axis 1", &status);
+    // fits_delete_key(fptr, "BZERO",  &status);
+    // fits_delete_key(fptr, "BSCALE", &status);
 
     /*Done*/
     fits_close_file(fptr, &status);

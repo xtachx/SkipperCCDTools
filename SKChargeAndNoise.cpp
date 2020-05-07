@@ -2,6 +2,7 @@
 #include "CoreImageOps.hpp"
 #include "include/CLI11.hpp"
 #include "include/ProgressBar.hpp"
+#include "fitsio.h"
 
 
 int main (int argc, char** argv) {
@@ -82,8 +83,8 @@ int main (int argc, char** argv) {
         std::string StdevOutFileName = OutFileName + "_Stdev.fits";
 
         // Save the processed files
-        ThisCCDImage.SaveFitsSK(MeanStdImage[0],MeanOutFileName);
-        ThisCCDImage.SaveFitsSK(MeanStdImage[1],StdevOutFileName);
+        ThisCCDImage.SaveFitsSK(MeanStdImage[0], MeanOutFileName, FLOAT_IMG);
+        ThisCCDImage.SaveFitsSK(MeanStdImage[1], StdevOutFileName, FLOAT_IMG);
 
         // Update progress bar
         ++damicReconProgress;

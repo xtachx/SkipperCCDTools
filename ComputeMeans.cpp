@@ -18,6 +18,7 @@ std::vector<cv::Mat> SKCCDImage::MakeMeanImgOfFrames(cv::Mat &skImage, int Start
         EndFrame = this->nChargeMeasurements;
     }
 
+  
     /*CV Std images*/
     cv::Mat _MeanImage = cv::Mat(this->ImageYMax, this->ImageXMax, CV_64F);
     cv::Mat _StdevImage = cv::Mat(this->ImageYMax, this->ImageXMax, CV_64F);
@@ -44,11 +45,11 @@ std::vector<cv::Mat> SKCCDImage::MakeMeanImgOfFrames(cv::Mat &skImage, int Start
 
             _MeanImage.at<double>(j, i) = 65535.0 - _ThisNDCMMean[0]; //65535.0 = max value of unsigned short
             _StdevImage.at<double>(j, i) = _ThisNDCMStd[0];
-
         }
     }
 
     std::vector<cv::Mat> MeanStdImages{_MeanImage, _StdevImage};
+
     return MeanStdImages;
 
 }

@@ -36,7 +36,7 @@ public:
 
     /*Loading and saving images*/
     void LoadFits( );
-    void SaveFitsSK(cv::Mat, std::string );
+    void SaveFitsSK(cv::Mat, std::string, int );
 
 
 
