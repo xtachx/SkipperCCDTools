@@ -92,10 +92,10 @@ void SKCCDImage::SaveFitsSK(cv::Mat ImageToSave, std::string outFileName){
     fits_create_file(&fptr, outFileName.c_str(), &status);
 
     /*This section copies the header from the original file to the new one*/
-    //fitsfile *fptr_infile;
-    //fits_open_file(&fptr_infile,this->inFitsFileName.c_str(),READONLY,&status);
-    //fits_copy_header(fptr_infile, fptr,  &status);
-    //fits_close_file(fptr_infile, &status);
+    fitsfile *fptr_infile;
+    fits_open_file(&fptr_infile,this->inFitsFileName.c_str(),READONLY,&status);
+    fits_copy_header(fptr_infile, fptr,  &status);
+    fits_close_file(fptr_infile, &status);
     /* ------------- */
 
     fits_create_img(fptr, LONG_IMG, nAxis, imageSizeXY_Out, &status);
