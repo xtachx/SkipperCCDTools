@@ -1,6 +1,5 @@
 cmake_minimum_required(VERSION 3.1)
 project( SkReconstruction )
-find_package(OpenCV REQUIRED)
 
 #Assuming Mac owners use macports!
 if(APPLE)
@@ -10,6 +9,8 @@ endif(APPLE)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/CMakeModules")
 find_package( CFITSIO )
+set(OpenCV_DIR "/home/pitam/opencv/build")
+find_package(OpenCV REQUIRED)
 
 
 set (CMAKE_CXX_FLAGS "-std=gnu++1z -O3 -march=native -m64 -lstdc++ -g")
@@ -24,9 +25,9 @@ set(SOURCE
    )
 set(HEADERS
         ${CMAKE_CURRENT_SOURCE_DIR}/CoreImageOps.hpp
-        )
-
-
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/CLI11.hpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/ProgressBar.hpp
+    )
 
 
 add_executable( DAMICMRecon SKChargeAndNoise.cpp ${SOURCE} ${HEADERS})
