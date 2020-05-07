@@ -30,3 +30,15 @@
 *.exe
 *.out
 *.app
+
+# CMake Files
+CMakeFiles
+CMakeModules
+CMakeCache.txt
+cmake_install.cmake
+
+# Executables
+Makefile
+DAMICMRecon
+
+*.fits
